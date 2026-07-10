@@ -1,7 +1,7 @@
 {
-  "name": "Rometips",
-  "short_name": "Rometips",
-  "description": "함께하는 롬스테드",
+  "name": "로메팁스",
+  "short_name": "로메팁스",
+  "description": "롬스테드 공략 노트",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
