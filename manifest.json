@@ -1,0 +1,11 @@
+{
+  "name": "Rometips",
+  "short_name": "Rometips",
+  "description": "롬스테드 게임 팁을 모아두는 개인용 공략 노트",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f1ea",
+  "theme_color": "#2b241c",
+  "lang": "ko-KR"
+}
