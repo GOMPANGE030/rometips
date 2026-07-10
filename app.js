@@ -165,6 +165,10 @@ function renderCategory(categoryId) {
     <h1 class="title">${currentCategory.icon} ${currentCategory.title}</h1>
     <p class="subtitle">${currentCategory.description}</p>
 
+    <div class="count-box">
+      등록된 항목 ${itemList.length}개
+    </div>
+
     <section class="category-list">
       ${itemList.length > 0 ? itemList.map(item => `
         <button class="card" onclick="renderDetail('${item.id}')">
