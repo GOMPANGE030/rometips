@@ -16,7 +16,18 @@ function renderHome() {
       롬스테드 게임 팁을 모아두는 개인용 공략 노트입니다.
     </p>
 
-    <section class="category-list">
+    <div class="search-box">
+      <input 
+        id="searchInput"
+        type="search"
+        placeholder="검색어 입력: 상인, 집중, 엉성함..."
+        oninput="handleSearch(this.value)"
+      />
+    </div>
+
+    <section id="searchResults"></section>
+
+    <section class="category-list" id="homeCategories">
       ${appData.map(category => `
         <button class="card" onclick="renderCategory('${category.id}')">
           <div class="card-title">${category.icon} ${category.title}</div>
@@ -26,9 +37,113 @@ function renderHome() {
     </section>
 
     <div class="ready">
-      카테고리를 눌러 세부 공략을 확인하세요.
+      카테고리를 누르거나 검색어를 입력해 세부 공략을 확인하세요.
     </div>
   `;
+}
+
+function handleSearch(keyword) {
+  const query = keyword.trim().toLowerCase();
+  const resultsBox = document.querySelector("#searchResults");
+  const homeCategories = document.querySelector("#homeCategories");
+
+  if (!query) {
+    resultsBox.innerHTML = "";
+    homeCategories.style.display = "grid";
+    return;
+  }
+
+  homeCategories.style.display = "none";
+
+  const results = [];
+
+  appData.forEach(category => {
+    const categoryText = `${category.title} ${category.description}`.toLowerCase();
+
+    if (categoryText.includes(query)) {
+      results.push({
+        type: "category",
+        category,
+        item: null
+      });
+    }
+
+    (category.items || []).forEach(item => {
+      const itemText = makeSearchText(category, item).toLowerCase();
+
+      if (itemText.includes(query)) {
+        results.push({
+          type: "item",
+          category,
+          item
+        });
+      }
+    });
+  });
+
+  if (results.length === 0) {
+    resultsBox.innerHTML = `
+      <div class="empty-box">
+        검색 결과가 없습니다.<br />
+        다른 단어로 검색해보세요.
+      </div>
+    `;
+    return;
+  }
+
+  resultsBox.innerHTML = `
+    <div class="search-count">검색 결과 ${results.length}개</div>
+    <section class="category-list">
+      ${results.map(result => {
+        if (result.type === "category") {
+          return `
+            <button class="card" onclick="renderCategory('${result.category.id}')">
+              <div class="card-title">${result.category.icon} ${result.category.title}</div>
+              <div class="card-desc">${result.category.description}</div>
+            </button>
+          `;
+        }
+
+        return `
+          <button class="card" onclick="openSearchItem('${result.category.id}', '${result.item.id}')">
+            <div class="card-title">${result.item.icon} ${result.item.title}</div>
+            <div class="card-desc">${result.category.title} · ${result.item.subtitle || result.item.summary || ""}</div>
+          </button>
+        `;
+      }).join("")}
+    </section>
+  `;
+}
+
+function makeSearchText(category, item) {
+  const sectionText = (item.sections || []).map(section => {
+    const itemText = (section.items || []).map(sectionItem => {
+      return `${sectionItem.name || ""} ${sectionItem.reason || ""}`;
+    }).join(" ");
+
+    return `${section.title} ${itemText}`;
+  }).join(" ");
+
+  return `
+    ${category.title}
+    ${category.description}
+    ${item.title}
+    ${item.subtitle || ""}
+    ${item.summary || ""}
+    ${sectionText}
+    ${item.tip || ""}
+  `;
+}
+
+function openSearchItem(categoryId, itemId) {
+  currentCategory = appData.find(category => category.id === categoryId);
+
+  if (!currentCategory) {
+    renderHome();
+    return;
+  }
+
+  renderDetail(itemId);
 }
 
 function renderCategory(categoryId) {
