@@ -1,7 +1,7 @@
 {
-  "name": "로메팁스",
-  "short_name": "로메팁스",
-  "description": "롬스테드 공략 노트",
+  "name": "롬스팁스",
+  "short_name": "롬스팁스",
+  "description": "롬스테드 게임 팁을 모아두는 개인용 공략 노트",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
