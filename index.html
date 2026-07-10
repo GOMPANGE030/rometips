@@ -82,6 +82,106 @@
       box-shadow: 0 6px 16px rgba(45, 35, 25, 0.06);
     }
 
+    .trait-recommender {
+      margin: 0 0 18px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 6px 16px rgba(45, 35, 25, 0.08);
+    }
+
+    .trait-recommender-title {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .trait-recommender-desc {
+      margin: 0 0 14px;
+      color: #6d6256;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .trait-filter-group {
+      margin-top: 14px;
+    }
+
+    .trait-filter-label {
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      color: #3d3328;
+    }
+
+    .trait-filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .trait-filter-button {
+      border: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 11px;
+      border-radius: 999px;
+      background: #f7f3ec;
+      color: #2b241c;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .trait-filter-button:active {
+      transform: scale(0.97);
+    }
+
+    .positive-filter-button.is-selected {
+      background: #dff1d8;
+      color: #315f2b;
+      box-shadow: inset 0 0 0 2px #81b875;
+    }
+
+    .negative-filter-button.is-selected {
+      background: #f8dddd;
+      color: #783131;
+      box-shadow: inset 0 0 0 2px #d08b8b;
+    }
+
+    .filter-icon {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .recommend-result-box {
+      margin-top: 14px;
+      padding: 12px 13px;
+      border-radius: 14px;
+      background: #fff7d6;
+      color: #4a3b16;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .filter-reset-button {
+      margin-top: 10px;
+      border: 0;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: #2b241c;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
     .category-list {
       display: grid;
       gap: 14px;
@@ -102,6 +202,24 @@
 
     .card:active {
       transform: scale(0.98);
+    }
+
+    .recommended-card {
+      background: #fff8d9;
+      border: 2px solid #f0d469;
+      box-shadow: 0 8px 20px rgba(143, 113, 20, 0.16);
+    }
+
+    .recommend-reason {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #f4dc71;
+      color: #4d3b00;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.35;
     }
 
     .card-title {
@@ -356,7 +474,7 @@
     </div>
   </main>
 
-  <script src="data.js?v=11"></script>
-  <script src="app.js?v=11"></script>
+  <script src="data.js?v=12"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>
