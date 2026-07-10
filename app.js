@@ -315,13 +315,25 @@ function renderDetail(itemId) {
 }
 
 function renderSection(section) {
+  const title = section.title || "";
+  let sectionClass = "";
+  let itemClass = "";
+
+  if (title.includes("긍정특성")) {
+    sectionClass = "positive-section";
+    itemClass = "positive-item";
+  } else if (title.includes("부정특성(피해야함)")) {
+    sectionClass = "negative-section";
+    itemClass = "negative-item";
+  }
+
   if (section.type === "ranked") {
     return `
-      <section class="info-section">
+      <section class="info-section ${sectionClass}">
         <h2>${section.title}</h2>
         <div class="rank-list">
           ${section.items.map(item => `
-            <div class="rank-item">
+            <div class="rank-item ${itemClass}">
               <span class="rank-badge">${item.rank}순위</span>
               ${renderIcon(item, "trait-icon")}
               <span class="rank-name">${item.name}</span>
@@ -334,11 +346,11 @@ function renderSection(section) {
 
   if (section.type === "explain") {
     return `
-      <section class="info-section">
+      <section class="info-section ${sectionClass}">
         <h2>${section.title}</h2>
         <div class="explain-list">
           ${section.items.map(item => `
-            <div class="explain-item">
+            <div class="explain-item ${itemClass}">
               <div class="explain-title">
                 ${renderIcon(item, "trait-icon")}
                 <strong>${item.name}</strong>
@@ -350,6 +362,14 @@ function renderSection(section) {
       </section>
     `;
   }
+
+  return `
+    <section class="info-section ${sectionClass}">
+      <h2>${section.title}</h2>
+      <p>표시할 수 없는 섹션 형식입니다.</p>
+    </section>
+  `;
+}
 
   return `
     <section class="info-section">
