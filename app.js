@@ -3,8 +3,99 @@ const appData = typeof APP_DATA !== "undefined" ? APP_DATA : [];
 let currentCategory = null;
 let currentItem = null;
 
+const ICON_PATH = "";
+
+const ICON_MAP = {
+  // 카테고리
+  "job-traits": "24px-Town_Core.webp",
+  "직업특성표": "24px-Town_Core.webp",
+  "weapon-prefix": "Iron_Gladius.webp",
+  "무기수식어": "Iron_Gladius.webp",
+  "building-tips": "24px-Material_Storage.webp",
+  "건물/배치팁": "24px-Material_Storage.webp",
+  "etc-tips": "SqqbH_Mf_400x400.jpg",
+  "기타팁": "SqqbH_Mf_400x400.jpg",
+
+  // 직업
+  "blacksmith": "24px-Blacksmith.webp",
+  "대장장이": "24px-Blacksmith.webp",
+  "leatherworker": "Leatherworker.webp",
+  "가죽 장인": "Leatherworker.webp",
+  "woodcutter": "24px-Lumber_Yard.webp",
+  "나무꾼": "24px-Lumber_Yard.webp",
+  "miner": "24px-Quarry.webp",
+  "광부": "24px-Quarry.webp",
+  "digger": "24px-Clay_Pit.webp",
+  "삽질꾼": "24px-Clay_Pit.webp",
+  "merchant": "24px-Market.webp",
+  "상인": "24px-Market.webp",
+  "farmer": "24px-Farmstead.webp",
+  "농부": "24px-Farmstead.webp",
+  "baker": "24px-Bakery.webp",
+  "제빵사": "24px-Bakery.webp",
+  "carpenter": "Carpenter's_Workshop.webp",
+  "목수": "Carpenter's_Workshop.webp",
+  "potter": "24px-Pottery.webp",
+  "도공": "24px-Pottery.webp",
+  "philosopher": "24px-University.webp",
+  "철학자": "24px-University.webp",
+  "sculptor": "24px-Sculptor.webp",
+  "조각가": "24px-Sculptor.webp",
+  "porter": "24px-Logistics_Tent.webp",
+  "짐꾼": "24px-Logistics_Tent.webp",
+
+  // 특성
+  "세심함": "Meticulous.webp",
+  "들뜸": "24px-Happiness.webp",
+  "우울": "24px-Happiness.webp",
+  "신속": "Quick.webp",
+  "엉성함": "Sloppy.webp",
+  "집중": "24px-Experience_Gain.webp",
+  "집중력 상실": "Unfocused.webp",
+  "팔랑귀": "Impressionable.webp",
+  "불충": "Disloyal.webp",
+  "머뭇거림": "Tentative.webp",
+  "식탐": "24px-Food_Cost.webp"
+};
+
 function initApp() {
   renderHome();
+}
+
+function getLabel(target) {
+  return target.title || target.name || "아이콘";
+}
+
+function resolveImage(target) {
+  if (!target) return "";
+
+  if (target.image) {
+    return target.image;
+  }
+
+  if (target.id && ICON_MAP[target.id]) {
+    return ICON_PATH + ICON_MAP[target.id];
+  }
+
+  if (target.title && ICON_MAP[target.title]) {
+    return ICON_PATH + ICON_MAP[target.title];
+  }
+
+  if (target.name && ICON_MAP[target.name]) {
+    return ICON_PATH + ICON_MAP[target.name];
+  }
+
+  return "";
+}
+
+function renderIcon(target, className = "inline-icon") {
+  const imageSrc = resolveImage(target);
+
+  if (imageSrc) {
+    return `<img class="${className}" src="${imageSrc}" alt="${getLabel(target)} 아이콘" />`;
+  }
+
+  return `<span class="${className} emoji-icon">${target.icon || "📌"}</span>`;
 }
 
 function renderHome() {
@@ -30,7 +121,7 @@ function renderHome() {
     <section class="category-list" id="homeCategories">
       ${appData.map(category => `
         <button class="card" onclick="renderCategory('${category.id}')">
-          <div class="card-title">${category.icon} ${category.title}</div>
+          <div class="card-title">${renderIcon(category)} ${category.title}</div>
           <div class="card-desc">${category.description}</div>
         </button>
       `).join("")}
@@ -98,7 +189,7 @@ function handleSearch(keyword) {
         if (result.type === "category") {
           return `
             <button class="card" onclick="renderCategory('${result.category.id}')">
-              <div class="card-title">${result.category.icon} ${result.category.title}</div>
+              <div class="card-title">${renderIcon(result.category)} ${result.category.title}</div>
               <div class="card-desc">${result.category.description}</div>
             </button>
           `;
@@ -106,7 +197,7 @@ function handleSearch(keyword) {
 
         return `
           <button class="card" onclick="openSearchItem('${result.category.id}', '${result.item.id}')">
-            <div class="card-title">${result.item.icon} ${result.item.title}</div>
+            <div class="card-title">${renderIcon(result.item)} ${result.item.title}</div>
             <div class="card-desc">${result.category.title} · ${result.item.subtitle || result.item.summary || ""}</div>
           </button>
         `;
@@ -162,7 +253,7 @@ function renderCategory(categoryId) {
   app.innerHTML = `
     <button class="back-button" onclick="renderHome()">← 메인으로</button>
 
-    <h1 class="title">${currentCategory.icon} ${currentCategory.title}</h1>
+    <h1 class="title">${renderIcon(currentCategory, "title-icon")} ${currentCategory.title}</h1>
     <p class="subtitle">${currentCategory.description}</p>
 
     <div class="count-box">
@@ -172,7 +263,7 @@ function renderCategory(categoryId) {
     <section class="category-list">
       ${itemList.length > 0 ? itemList.map(item => `
         <button class="card" onclick="renderDetail('${item.id}')">
-          <div class="card-title">${item.icon} ${item.title}</div>
+          <div class="card-title">${renderIcon(item)} ${item.title}</div>
           <div class="card-desc">${item.subtitle || item.summary || ""}</div>
         </button>
       `).join("") : `
@@ -204,7 +295,7 @@ function renderDetail(itemId) {
     <button class="back-button" onclick="renderCategory('${currentCategory.id}')">← 목록으로</button>
 
     <section class="detail-header">
-      <div class="detail-icon">${currentItem.icon}</div>
+      <div class="detail-icon">${renderIcon(currentItem, "detail-image-icon")}</div>
       <h1 class="title">${currentItem.title}</h1>
       <p class="subtitle">${currentItem.subtitle || ""}</p>
       ${currentItem.summary ? `<p class="summary">${currentItem.summary}</p>` : ""}
@@ -232,6 +323,7 @@ function renderSection(section) {
           ${section.items.map(item => `
             <div class="rank-item">
               <span class="rank-badge">${item.rank}순위</span>
+              ${renderIcon(item, "trait-icon")}
               <span class="rank-name">${item.name}</span>
             </div>
           `).join("")}
@@ -247,7 +339,10 @@ function renderSection(section) {
         <div class="explain-list">
           ${section.items.map(item => `
             <div class="explain-item">
-              <strong>${item.name}</strong>
+              <div class="explain-title">
+                ${renderIcon(item, "trait-icon")}
+                <strong>${item.name}</strong>
+              </div>
               <p>${item.reason}</p>
             </div>
           `).join("")}
