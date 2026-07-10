@@ -2,6 +2,8 @@ const appData = typeof APP_DATA !== "undefined" ? APP_DATA : [];
 
 let currentCategory = null;
 let currentItem = null;
+let selectedPositiveTrait = "";
+let selectedNegativeTrait = "";
 
 const ICON_PATH = "";
 
@@ -57,6 +59,9 @@ const ICON_MAP = {
   "머뭇거림": "Tentative.webp",
   "식탐": "24px-Food_Cost.webp"
 };
+
+const POSITIVE_TRAITS = ["세심함", "신속", "집중", "팔랑귀", "들뜸"];
+const NEGATIVE_TRAITS = ["엉성함", "우울", "머뭇거림", "집중력 상실", "불충", "식탐"];
 
 function initApp() {
   renderHome();
@@ -122,6 +127,170 @@ function getSectionColorClass(section) {
     itemClass: "neutral-item",
     badgeClass: ""
   };
+}
+
+function findSection(item, sectionTitle) {
+  return (item.sections || []).find(section => section.title === sectionTitle);
+}
+
+function sectionHasTrait(section, traitName) {
+  if (!section || !traitName) return false;
+  return (section.items || []).some(sectionItem => sectionItem.name === traitName);
+}
+
+function findPositiveTrait(item, traitName) {
+  const positiveSection = findSection(item, "긍정특성");
+  if (!positiveSection || !traitName) return null;
+
+  return (positiveSection.items || []).find(sectionItem => sectionItem.name === traitName) || null;
+}
+
+function getRecommendation(item) {
+  if (!selectedPositiveTrait || !selectedNegativeTrait) {
+    return {
+      isRecommended: false,
+      score: 0,
+      reason: ""
+    };
+  }
+
+  const positiveMatch = findPositiveTrait(item, selectedPositiveTrait);
+  const avoidSection = findSection(item, "부정특성(피해야함)");
+  const lowImpactSection = findSection(item, "있어도 영향 적은 부정특성");
+
+  const negativeIsAvoid = sectionHasTrait(avoidSection, selectedNegativeTrait);
+  const negativeIsLowImpact = sectionHasTrait(lowImpactSection, selectedNegativeTrait);
+
+  if (!positiveMatch || !negativeIsLowImpact || negativeIsAvoid) {
+    return {
+      isRecommended: false,
+      score: 0,
+      reason: ""
+    };
+  }
+
+  const positiveScore = positiveMatch.rank === 1 ? 3 : positiveMatch.rank === 2 ? 2 : 1;
+  const lowImpactScore = 3;
+  const totalScore = positiveScore + lowImpactScore;
+
+  return {
+    isRecommended: true,
+    score: totalScore,
+    reason: `${selectedPositiveTrait} ${positiveMatch.rank}순위 + ${selectedNegativeTrait} 영향 적음`
+  };
+}
+
+function getSortedItemMeta(itemList) {
+  return itemList
+    .map((item, index) => ({
+      item,
+      index,
+      recommendation: getRecommendation(item)
+    }))
+    .sort((a, b) => {
+      if (a.recommendation.isRecommended !== b.recommendation.isRecommended) {
+        return b.recommendation.isRecommended - a.recommendation.isRecommended;
+      }
+
+      if (a.recommendation.isRecommended && b.recommendation.isRecommended) {
+        return b.recommendation.score - a.recommendation.score;
+      }
+
+      return a.index - b.index;
+    });
+}
+
+function getRecommendationCount(itemList) {
+  return itemList.filter(item => getRecommendation(item).isRecommended).length;
+}
+
+function setPositiveTrait(traitName) {
+  selectedPositiveTrait = selectedPositiveTrait === traitName ? "" : traitName;
+  renderCategory(currentCategory.id);
+}
+
+function setNegativeTrait(traitName) {
+  selectedNegativeTrait = selectedNegativeTrait === traitName ? "" : traitName;
+  renderCategory(currentCategory.id);
+}
+
+function resetTraitFilter() {
+  selectedPositiveTrait = "";
+  selectedNegativeTrait = "";
+  renderCategory(currentCategory.id);
+}
+
+function renderFilterButton(type, traitName) {
+  const isPositive = type === "positive";
+  const isSelected = isPositive
+    ? selectedPositiveTrait === traitName
+    : selectedNegativeTrait === traitName;
+
+  const buttonClass = [
+    "trait-filter-button",
+    isPositive ? "positive-filter-button" : "negative-filter-button",
+    isSelected ? "is-selected" : ""
+  ].join(" ");
+
+  const handlerName = isPositive ? "setPositiveTrait" : "setNegativeTrait";
+
+  return `
+    <button class="${buttonClass}" onclick="${handlerName}('${traitName}')">
+      ${renderIcon({ name: traitName }, "filter-icon")}
+      <span>${traitName}</span>
+    </button>
+  `;
+}
+
+function renderTraitRecommender(category) {
+  if (!category || category.id !== "job-traits") {
+    return "";
+  }
+
+  const itemList = category.items || [];
+  const hasBothSelected = selectedPositiveTrait && selectedNegativeTrait;
+  const recommendationCount = hasBothSelected ? getRecommendationCount(itemList) : 0;
+
+  let resultText = "긍정특성 1개와 부정특성 1개를 선택하면, 적합한 직업이 맨 위로 올라옵니다.";
+
+  if (hasBothSelected && recommendationCount > 0) {
+    resultText = `${selectedPositiveTrait} + ${selectedNegativeTrait} 조합에 맞는 추천 직업 ${recommendationCount}개`;
+  }
+
+  if (hasBothSelected && recommendationCount === 0) {
+    resultText = `${selectedPositiveTrait} + ${selectedNegativeTrait} 조합에 맞는 추천 직업이 없습니다.`;
+  }
+
+  return `
+    <section class="trait-recommender">
+      <div class="trait-recommender-title">시민 특성으로 직업 추천</div>
+      <p class="trait-recommender-desc">
+        시민이 가진 긍정특성 1개와 부정특성 1개를 선택하세요.
+      </p>
+
+      <div class="trait-filter-group">
+        <div class="trait-filter-label">긍정특성</div>
+        <div class="trait-filter-buttons">
+          ${POSITIVE_TRAITS.map(trait => renderFilterButton("positive", trait)).join("")}
+        </div>
+      </div>
+
+      <div class="trait-filter-group">
+        <div class="trait-filter-label">부정특성</div>
+        <div class="trait-filter-buttons">
+          ${NEGATIVE_TRAITS.map(trait => renderFilterButton("negative", trait)).join("")}
+        </div>
+      </div>
+
+      <div class="recommend-result-box">
+        ${resultText}
+      </div>
+
+      ${(selectedPositiveTrait || selectedNegativeTrait) ? `
+        <button class="filter-reset-button" onclick="resetTraitFilter()">선택 초기화</button>
+      ` : ""}
+    </section>
+  `;
 }
 
 function renderHome() {
@@ -275,6 +444,7 @@ function renderCategory(categoryId) {
   }
 
   const itemList = currentCategory.items || [];
+  const sortedMeta = getSortedItemMeta(itemList);
 
   app.innerHTML = `
     <button class="back-button" onclick="renderHome()">← 메인으로</button>
@@ -286,11 +456,18 @@ function renderCategory(categoryId) {
       등록된 항목 ${itemList.length}개
     </div>
 
+    ${renderTraitRecommender(currentCategory)}
+
     <section class="category-list">
-      ${itemList.length > 0 ? itemList.map(item => `
-        <button class="card" onclick="renderDetail('${item.id}')">
+      ${sortedMeta.length > 0 ? sortedMeta.map(({ item, recommendation }) => `
+        <button class="card ${recommendation.isRecommended ? "recommended-card" : ""}" onclick="renderDetail('${item.id}')">
           <div class="card-title">${renderIcon(item)} ${item.title}</div>
           <div class="card-desc">${item.subtitle || item.summary || ""}</div>
+          ${recommendation.isRecommended ? `
+            <div class="recommend-reason">
+              추천 조합 · ${recommendation.reason}
+            </div>
+          ` : ""}
         </button>
       `).join("") : `
         <div class="empty-box">
