@@ -1,14 +1,85 @@
+const ICON_PATH = "";
+
+const ICONS = {
+  app: ICON_PATH + "SqqbH_Mf_400x400.jpg",
+
+  townCore: ICON_PATH + "24px-Town_Core.webp",
+  weaponPrefix: ICON_PATH + "Iron_Gladius.webp",
+
+  efficiency: ICON_PATH + "24px-Efficiency.webp",
+  market: ICON_PATH + "24px-Market.webp",
+  university: ICON_PATH + "24px-University.webp",
+  farmstead: ICON_PATH + "24px-Farmstead.webp",
+  loyalty: ICON_PATH + "24px-Loyalty.webp",
+  logisticsTent: ICON_PATH + "24px-Logistics_Tent.webp",
+  bakery: ICON_PATH + "24px-Bakery.webp",
+  materialStorage: ICON_PATH + "24px-Material_Storage.webp",
+  quarry: ICON_PATH + "24px-Quarry.webp",
+  happiness: ICON_PATH + "24px-Happiness.webp",
+  experienceGain: ICON_PATH + "24px-Experience_Gain.webp",
+  lumberYard: ICON_PATH + "24px-Lumber_Yard.webp",
+  clayPit: ICON_PATH + "24px-Clay_Pit.webp",
+  pottery: ICON_PATH + "24px-Pottery.webp",
+  foodCost: ICON_PATH + "24px-Food_Cost.webp",
+  expertise: ICON_PATH + "24px-Expertise.webp",
+
+  blacksmith: ICON_PATH + "24px-Blacksmith.webp",
+  sculptor: ICON_PATH + "24px-Sculptor.webp",
+  carpenterWorkshop: ICON_PATH + "Carpenter's_Workshop.webp",
+  leatherworker: ICON_PATH + "Leatherworker.webp",
+
+  disloyal: ICON_PATH + "Disloyal.webp",
+  quick: ICON_PATH + "Quick.webp",
+  sloppy: ICON_PATH + "Sloppy.webp",
+  impressionable: ICON_PATH + "Impressionable.webp",
+  meticulous: ICON_PATH + "Meticulous.webp",
+  unfocused: ICON_PATH + "Unfocused.webp",
+  tentative: ICON_PATH + "Tentative.webp"
+};
+
+const TRAIT_ICONS = {
+  "세심함": ICONS.meticulous,
+  "들뜸": ICONS.happiness,
+  "신속": ICONS.quick,
+  "엉성함": ICONS.sloppy,
+  "우울": ICONS.happiness,
+  "머뭇거림": ICONS.tentative,
+  "집중": ICONS.experienceGain,
+  "팔랑귀": ICONS.impressionable,
+  "집중력 상실": ICONS.unfocused,
+  "불충": ICONS.disloyal,
+  "식탐": ICONS.foodCost
+};
+
+function ranked(rank, name) {
+  return {
+    rank,
+    name,
+    image: TRAIT_ICONS[name] || ""
+  };
+}
+
+function explain(name, reason) {
+  return {
+    name,
+    reason,
+    image: TRAIT_ICONS[name] || ""
+  };
+}
+
 const APP_DATA = [
   {
     id: "job-traits",
     title: "직업특성표",
     icon: "🧑‍🌾",
+    image: ICONS.townCore,
     description: "직업별 긍정특성, 피해야 할 부정특성, 배치 기준 정리",
     items: [
       {
         id: "blacksmith",
         title: "대장장이",
         icon: "🔨",
+        image: ICONS.blacksmith,
         subtitle: "제작 배치 기준",
         summary: "대장장이는 제작 품질과 작업 안정성이 중요한 직업입니다.",
         sections: [
@@ -16,36 +87,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "세심함" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "신속" }
+              ranked(1, "세심함"),
+              ranked(2, "들뜸"),
+              ranked(3, "신속")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "엉성함" },
-              { rank: 2, name: "우울" },
-              { rank: 3, name: "머뭇거림" }
+              ranked(1, "엉성함"),
+              ranked(2, "우울"),
+              ranked(3, "머뭇거림")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "제작 품질에는 직접 영향이 적습니다."
-              },
-              {
-                name: "식탐",
-                reason: "식량만 감당되면 작업 성능에는 영향이 적습니다."
-              },
-              {
-                name: "불충",
-                reason: "장기 충성도 보너스는 늦지만 즉시 제작 성능은 직접 깎지 않습니다."
-              }
+              explain("집중력 상실", "제작 품질에는 직접 영향이 적습니다."),
+              explain("식탐", "식량만 감당되면 작업 성능에는 영향이 적습니다."),
+              explain("불충", "장기 충성도 보너스는 늦지만 즉시 제작 성능은 직접 깎지 않습니다.")
             ]
           }
         ],
@@ -55,43 +117,35 @@ const APP_DATA = [
         id: "leatherworker",
         title: "가죽 장인",
         icon: "🧵",
-        subtitle: "가죽 제작 배치 기준",
+        image: ICONS.leatherworker,
+        subtitle: "가죽공방 배치 기준",
         summary: "가죽 장인은 대장장이와 비슷하게 제작 품질과 안정성을 중요하게 보는 직업입니다.",
         sections: [
           {
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "세심함" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "신속" }
+              ranked(1, "세심함"),
+              ranked(2, "들뜸"),
+              ranked(3, "신속")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "엉성함" },
-              { rank: 2, name: "우울" },
-              { rank: 3, name: "머뭇거림" }
+              ranked(1, "엉성함"),
+              ranked(2, "우울"),
+              ranked(3, "머뭇거림")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "가죽 제작 품질에는 직접 영향이 적습니다."
-              },
-              {
-                name: "식탐",
-                reason: "식량 여유가 있으면 감수 가능합니다."
-              },
-              {
-                name: "불충",
-                reason: "장기 육성은 느려지지만 제작 자체에는 직접 영향이 적습니다."
-              }
+              explain("집중력 상실", "가죽 제작 품질에는 직접 영향이 적습니다."),
+              explain("식탐", "식량 여유가 있으면 감수 가능합니다."),
+              explain("불충", "장기 육성은 느려지지만 제작 자체에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -101,6 +155,7 @@ const APP_DATA = [
         id: "woodcutter",
         title: "나무꾼",
         icon: "🪓",
+        image: ICONS.lumberYard,
         subtitle: "벌목장 배치 기준",
         summary: "희귀 장신구 파밍까지 보는 기준입니다.",
         sections: [
@@ -108,36 +163,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "세심함" },
-              { rank: 2, name: "신속" },
-              { rank: 3, name: "들뜸" }
+              ranked(1, "세심함"),
+              ranked(2, "신속"),
+              ranked(3, "들뜸")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "엉성함" },
-              { rank: 2, name: "머뭇거림" },
-              { rank: 3, name: "우울" }
+              ranked(1, "엉성함"),
+              ranked(2, "머뭇거림"),
+              ranked(3, "우울")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "나무꾼 레벨을 다 올린 뒤면 영향이 적습니다."
-              },
-              {
-                name: "식탐",
-                reason: "식량 자동화 이후엔 감수 가능합니다."
-              },
-              {
-                name: "불충",
-                reason: "즉시 벌목/희귀드랍 자체에는 직접 영향이 적습니다."
-              }
+              explain("집중력 상실", "나무꾼 레벨을 다 올린 뒤면 영향이 적습니다."),
+              explain("식탐", "식량 자동화 이후엔 감수 가능합니다."),
+              explain("불충", "즉시 벌목/희귀드랍 자체에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -147,6 +193,7 @@ const APP_DATA = [
         id: "miner",
         title: "광부",
         icon: "⛏️",
+        image: ICONS.quarry,
         subtitle: "채석장 배치 기준",
         summary: "광부는 광물 수급과 희귀 드랍 파밍 목적에 따라 우선 특성이 달라집니다.",
         sections: [
@@ -154,36 +201,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "세심함" },
-              { rank: 2, name: "신속" },
-              { rank: 3, name: "들뜸" }
+              ranked(1, "세심함"),
+              ranked(2, "신속"),
+              ranked(3, "들뜸")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "엉성함" },
-              { rank: 2, name: "머뭇거림" },
-              { rank: 3, name: "우울" }
+              ranked(1, "엉성함"),
+              ranked(2, "머뭇거림"),
+              ranked(3, "우울")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "광부 레벨이 충분하면 영향이 적습니다."
-              },
-              {
-                name: "식탐",
-                reason: "식량 여유가 있으면 감수 가능합니다."
-              },
-              {
-                name: "불충",
-                reason: "당장 채굴 성능에는 직접 영향이 적습니다."
-              }
+              explain("집중력 상실", "광부 레벨이 충분하면 영향이 적습니다."),
+              explain("식탐", "식량 여유가 있으면 감수 가능합니다."),
+              explain("불충", "당장 채굴 성능에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -193,6 +231,7 @@ const APP_DATA = [
         id: "digger",
         title: "삽질꾼",
         icon: "🪏",
+        image: ICONS.clayPit,
         subtitle: "점토 채굴장 배치 기준",
         summary: "삽질꾼은 점토/화산재 같은 실사용 자원 수급 압박이 커서 기본적으로 신속을 우선합니다.",
         sections: [
@@ -200,36 +239,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "세심함" },
-              { rank: 3, name: "들뜸" }
+              ranked(1, "신속"),
+              ranked(2, "세심함"),
+              ranked(3, "들뜸")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "엉성함" },
-              { rank: 3, name: "우울" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "엉성함"),
+              ranked(3, "우울")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "삽질꾼 레벨이 충분하면 영향이 적습니다."
-              },
-              {
-                name: "불충",
-                reason: "점토/화산재 생산 자체에는 직접 영향이 적습니다."
-              },
-              {
-                name: "식탐",
-                reason: "식량 자동화가 되면 감수 가능합니다."
-              }
+              explain("집중력 상실", "삽질꾼 레벨이 충분하면 영향이 적습니다."),
+              explain("불충", "점토/화산재 생산 자체에는 직접 영향이 적습니다."),
+              explain("식탐", "식량 자동화가 되면 감수 가능합니다.")
             ]
           }
         ],
@@ -239,6 +269,7 @@ const APP_DATA = [
         id: "merchant",
         title: "상인",
         icon: "🛒",
+        image: ICONS.market,
         subtitle: "시장 배치 기준",
         summary: "상인은 시장 배치 기준으로, 판매 라인업과 레벨업 효율을 중심으로 보는 직업입니다.",
         sections: [
@@ -246,36 +277,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "집중" },
-              { rank: 2, name: "팔랑귀" },
-              { rank: 3, name: "들뜸" }
+              ranked(1, "집중"),
+              ranked(2, "팔랑귀"),
+              ranked(3, "들뜸")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "집중력 상실" },
-              { rank: 2, name: "불충" },
-              { rank: 3, name: "우울" }
+              ranked(1, "집중력 상실"),
+              ranked(2, "불충"),
+              ranked(3, "우울")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "엉성함",
-                reason: "상인은 전문성 활용도가 낮아서 영향이 적습니다."
-              },
-              {
-                name: "머뭇거림",
-                reason: "시장은 작업속도보다 레벨업/판매 라인업이 중요해서 상대적으로 덜 아픕니다."
-              },
-              {
-                name: "식탐",
-                reason: "식량 여유가 있으면 감수 가능합니다."
-              }
+              explain("엉성함", "상인은 전문성 활용도가 낮아서 영향이 적습니다."),
+              explain("머뭇거림", "시장은 작업속도보다 레벨업/판매 라인업이 중요해서 상대적으로 덜 아픕니다."),
+              explain("식탐", "식량 여유가 있으면 감수 가능합니다.")
             ]
           }
         ],
@@ -285,6 +307,7 @@ const APP_DATA = [
         id: "farmer",
         title: "농부",
         icon: "🌾",
+        image: ICONS.farmstead,
         subtitle: "농장 배치 기준",
         summary: "농부는 농사 자동화와 식량 생산 효율을 중심으로 보는 직업입니다.",
         sections: [
@@ -292,36 +315,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "팔랑귀" }
+              ranked(1, "신속"),
+              ranked(2, "들뜸"),
+              ranked(3, "팔랑귀")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "우울" },
-              { rank: 3, name: "식탐" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "우울"),
+              ranked(3, "식탐")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "엉성함",
-                reason: "농사 자동화에는 전문성 영향이 낮아 보입니다."
-              },
-              {
-                name: "집중력 상실",
-                reason: "농부 레벨을 다 올린 뒤면 영향이 적습니다."
-              },
-              {
-                name: "불충",
-                reason: "장기 보너스는 늦지만 농사 작업 자체에는 직접 영향이 적습니다."
-              }
+              explain("엉성함", "농사 자동화에는 전문성 영향이 낮아 보입니다."),
+              explain("집중력 상실", "농부 레벨을 다 올린 뒤면 영향이 적습니다."),
+              explain("불충", "장기 보너스는 늦지만 농사 작업 자체에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -331,6 +345,7 @@ const APP_DATA = [
         id: "baker",
         title: "제빵사",
         icon: "🥖",
+        image: ICONS.bakery,
         subtitle: "제빵소 배치 기준",
         summary: "제빵사는 음식 생산 속도와 안정적인 식량 순환을 중심으로 보는 직업입니다.",
         sections: [
@@ -338,36 +353,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "팔랑귀" }
+              ranked(1, "신속"),
+              ranked(2, "들뜸"),
+              ranked(3, "팔랑귀")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "우울" },
-              { rank: 3, name: "식탐" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "우울"),
+              ranked(3, "식탐")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "엉성함",
-                reason: "음식 생산은 전문성보다 속도 쪽이 중요합니다."
-              },
-              {
-                name: "집중력 상실",
-                reason: "제빵사 레벨 완료 후엔 영향이 적습니다."
-              },
-              {
-                name: "불충",
-                reason: "즉시 생산 성능에는 직접 영향이 적습니다."
-              }
+              explain("엉성함", "음식 생산은 전문성보다 속도 쪽이 중요합니다."),
+              explain("집중력 상실", "제빵사 레벨 완료 후엔 영향이 적습니다."),
+              explain("불충", "즉시 생산 성능에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -377,43 +383,35 @@ const APP_DATA = [
         id: "carpenter",
         title: "목수",
         icon: "🪵",
-        subtitle: "목공/건축 배치 기준",
+        image: ICONS.carpenterWorkshop,
+        subtitle: "목공소 배치 기준",
         summary: "목수는 건축 자동화와 제작 속도 쪽 효율을 중심으로 보는 직업입니다.",
         sections: [
           {
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "팔랑귀" }
+              ranked(1, "신속"),
+              ranked(2, "들뜸"),
+              ranked(3, "팔랑귀")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "우울" },
-              { rank: 3, name: "식탐" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "우울"),
+              ranked(3, "식탐")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "목수 레벨을 다 올린 뒤면 영향이 적습니다."
-              },
-              {
-                name: "엉성함",
-                reason: "일반 건축 보조/자재 제작용이면 상대적으로 영향이 적습니다."
-              },
-              {
-                name: "불충",
-                reason: "장기 보너스 지연 외에는 직접 영향이 적습니다."
-              }
+              explain("집중력 상실", "목수 레벨을 다 올린 뒤면 영향이 적습니다."),
+              explain("엉성함", "일반 건축 보조/자재 제작용이면 상대적으로 영향이 적습니다."),
+              explain("불충", "장기 보너스 지연 외에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -423,43 +421,35 @@ const APP_DATA = [
         id: "potter",
         title: "도공",
         icon: "🏺",
-        subtitle: "도자기/용기 제작 배치 기준",
+        image: ICONS.pottery,
+        subtitle: "도자기 공방 배치 기준",
         summary: "도공은 단지나 병 같은 대량 생산 효율을 중심으로 보는 직업입니다.",
         sections: [
           {
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "팔랑귀" }
+              ranked(1, "신속"),
+              ranked(2, "들뜸"),
+              ranked(3, "팔랑귀")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "우울" },
-              { rank: 3, name: "식탐" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "우울"),
+              ranked(3, "식탐")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "도공 레벨이 충분하면 영향이 적습니다."
-              },
-              {
-                name: "불충",
-                reason: "단지/병 생산 자체에는 직접 영향이 적습니다."
-              },
-              {
-                name: "엉성함",
-                reason: "대량 생산용이면 감수 가능합니다."
-              }
+              explain("집중력 상실", "도공 레벨이 충분하면 영향이 적습니다."),
+              explain("불충", "단지/병 생산 자체에는 직접 영향이 적습니다."),
+              explain("엉성함", "대량 생산용이면 감수 가능합니다.")
             ]
           }
         ],
@@ -469,6 +459,7 @@ const APP_DATA = [
         id: "philosopher",
         title: "철학자",
         icon: "📚",
+        image: ICONS.university,
         subtitle: "대학 배치 기준",
         summary: "철학자는 연구 논문 생산과 레벨업 상태에 따라 집중과 신속의 가치가 달라집니다.",
         sections: [
@@ -476,36 +467,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "집중" },
-              { rank: 3, name: "들뜸" }
+              ranked(1, "신속"),
+              ranked(2, "집중"),
+              ranked(3, "들뜸")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "집중력 상실" },
-              { rank: 3, name: "우울" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "집중력 상실"),
+              ranked(3, "우울")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "엉성함",
-                reason: "연구 논문 생산용이면 영향이 적습니다."
-              },
-              {
-                name: "식탐",
-                reason: "식량 여유가 있으면 감수 가능합니다."
-              },
-              {
-                name: "불충",
-                reason: "즉시 연구 생산에는 직접 영향이 적습니다."
-              }
+              explain("엉성함", "연구 논문 생산용이면 영향이 적습니다."),
+              explain("식탐", "식량 여유가 있으면 감수 가능합니다."),
+              explain("불충", "즉시 연구 생산에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -515,6 +497,7 @@ const APP_DATA = [
         id: "sculptor",
         title: "조각가",
         icon: "🗿",
+        image: ICONS.sculptor,
         subtitle: "조각/꾸미기 제작 기준",
         summary: "조각가는 현재 우선도가 낮은 직업으로, 좋은 시민을 먼저 넣기엔 아까운 편입니다.",
         sections: [
@@ -522,36 +505,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "팔랑귀" }
+              ranked(1, "신속"),
+              ranked(2, "들뜸"),
+              ranked(3, "팔랑귀")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "우울" },
-              { rank: 3, name: "식탐" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "우울"),
+              ranked(3, "식탐")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "조각가 레벨을 크게 신경 쓰지 않으면 영향이 적습니다."
-              },
-              {
-                name: "엉성함",
-                reason: "가구/꾸미기 제작 위주면 상대적으로 영향이 적습니다."
-              },
-              {
-                name: "불충",
-                reason: "즉시 제작 속도에는 직접 영향이 적습니다."
-              }
+              explain("집중력 상실", "조각가 레벨을 크게 신경 쓰지 않으면 영향이 적습니다."),
+              explain("엉성함", "가구/꾸미기 제작 위주면 상대적으로 영향이 적습니다."),
+              explain("불충", "즉시 제작 속도에는 직접 영향이 적습니다.")
             ]
           }
         ],
@@ -561,6 +535,7 @@ const APP_DATA = [
         id: "porter",
         title: "짐꾼",
         icon: "📦",
+        image: ICONS.logisticsTent,
         subtitle: "교역소 배치 기준",
         summary: "짐꾼은 좋은 시민을 오래 투입하기보다는 남는 시민을 활용하는 쪽에 가까운 직업입니다.",
         sections: [
@@ -568,36 +543,27 @@ const APP_DATA = [
             title: "긍정특성",
             type: "ranked",
             items: [
-              { rank: 1, name: "신속" },
-              { rank: 2, name: "들뜸" },
-              { rank: 3, name: "팔랑귀" }
+              ranked(1, "신속"),
+              ranked(2, "들뜸"),
+              ranked(3, "팔랑귀")
             ]
           },
           {
             title: "부정특성(피해야함)",
             type: "ranked",
             items: [
-              { rank: 1, name: "머뭇거림" },
-              { rank: 2, name: "식탐" },
-              { rank: 3, name: "우울" }
+              ranked(1, "머뭇거림"),
+              ranked(2, "식탐"),
+              ranked(3, "우울")
             ]
           },
           {
             title: "있어도 영향 적은 부정특성",
             type: "explain",
             items: [
-              {
-                name: "집중력 상실",
-                reason: "짐꾼 최대 레벨이 낮아서 거의 의미가 없습니다."
-              },
-              {
-                name: "엉성함",
-                reason: "전문성 활용도가 낮습니다."
-              },
-              {
-                name: "불충",
-                reason: "좋은 시민을 짐꾼에 오래 쓸 일이 적어서 영향이 낮습니다."
-              }
+              explain("집중력 상실", "짐꾼 최대 레벨이 낮아서 거의 의미가 없습니다."),
+              explain("엉성함", "전문성 활용도가 낮습니다."),
+              explain("불충", "좋은 시민을 짐꾼에 오래 쓸 일이 적어서 영향이 낮습니다.")
             ]
           }
         ],
@@ -609,6 +575,7 @@ const APP_DATA = [
     id: "weapon-prefix",
     title: "무기수식어",
     icon: "⚔️",
+    image: ICONS.weaponPrefix,
     description: "무기에 붙는 수식어 효과와 추천 사용처 정리",
     items: []
   },
@@ -616,6 +583,7 @@ const APP_DATA = [
     id: "building-tips",
     title: "건물/배치팁",
     icon: "🏠",
+    image: ICONS.materialStorage,
     description: "마을 운영과 건물 배치 관련 팁 정리",
     items: []
   },
@@ -623,6 +591,7 @@ const APP_DATA = [
     id: "etc-tips",
     title: "기타팁",
     icon: "📌",
+    image: ICONS.app,
     description: "나중에 추가할 여러 공략 메모",
     items: []
   }
