@@ -297,9 +297,9 @@ function renderHome() {
   const app = document.querySelector(".app");
 
   app.innerHTML = `
-    <h1 class="title">Rometips</h1>
+    <img class="logo-image" src="rometips_logo.png" alt="Rometips" />
     <p class="subtitle">
-      롬스테드 게임 팁을 모아두는 개인용 공략 노트입니다.
+      롬스테드 해부리자
     </p>
 
     <div class="search-box">
