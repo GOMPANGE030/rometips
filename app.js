@@ -297,7 +297,7 @@ function renderHome() {
   const app = document.querySelector(".app");
 
   app.innerHTML = `
-    <img class="logo-image" src="rometips_logo.png" alt="Rometips" />
+    <img class="logo-image" src="romestips_logo.png" alt="롬스팁스" />
     <p class="subtitle">
       롬스테드 해부리자
     </p>
